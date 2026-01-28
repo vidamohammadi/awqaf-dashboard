@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import type { RouteRecordRaw } from "vue-router";
+//import feature routes
 
-const routes: RouteRecordRaw[] = [
+const routes = [
   {
-
+    path: "/",
+    redirect: "/dashboard",
   },
 ];
 

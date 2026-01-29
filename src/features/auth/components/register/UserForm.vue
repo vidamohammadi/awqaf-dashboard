@@ -1,52 +1,19 @@
 <script setup lang="ts">
 import TextInput from "../../../../shared/ui/form/TextInput.vue";
-import { reactive } from "vue";
-import { useVuelidate } from "@vuelidate/core";
-import { required, email, minLength } from "@vuelidate/validators";
+ import { useVuelidate } from "@vuelidate/core";
+const props = defineProps<{
+  formList: {label: string , placeholder: string, type: string,form:string}[],
+  form: object,
+  rules: object,
+  title:string,
+  description:string,
+  button: string
 
-const formList = [
-  {
-    label: "Full Name",
-    placeholder: "Enter your name.",
-    type: "text",
-    form: "name",
-  },
-  {
-    label: "Phone",
-    placeholder: "Enter your phone.",
-    type: "text",
-    form: "phone",
-  },
-  {
-    label: "Email Address",
-    placeholder: "Enter your email.",
-    type: "text",
-    form: "email",
-  },
-  {
-    label: "Password",
-    placeholder: "Enter your password.",
-    type: "password",
-    form: "password",
-  },
-];
+}>()
 
-const form = reactive({
-  name: "",
-  phone: "",
-  email: "",
-  password: "",
-  acceptTerms: true,
-});
 
-const rules = {
-  name: { required },
-  phone: { required },
-  email: { required, email },
-  password: { required, minLength: minLength(8) },
-};
 
-const v$ = useVuelidate(rules, form);
+const v$ = useVuelidate(props.rules, props.form);
 
 const handleSubmit = async () => {
   v$.value.$touch();
@@ -54,7 +21,7 @@ const handleSubmit = async () => {
     console.log("Form has errors");
     return;
   }
-  console.log("submit", form);
+  console.log("submit", props.form);
 };
 </script>
 
@@ -64,11 +31,10 @@ const handleSubmit = async () => {
 
     <div class="flex flex-col lg:items-start items-center  gap-[8px]">
       <h1 class="text-[#101010] lg:text-[28px] text-[24px] font-[500] leading-[120%]">
-        Create Your Account
-      </h1>
+        {{props.title}}      </h1>
       <p class="text-[#878787] text-[14px] font-[400] leading-[150%]">
-        It's free to start. No credit card required.
-      </p>
+{{
+        props.description}}      </p>
     </div>
 
     <form
@@ -77,14 +43,14 @@ const handleSubmit = async () => {
     >
       <div class="flex flex-col gap-[16px] w-full">
         <TextInput
-          v-for="item in formList"
+          v-for="item in props.formList"
           :key="item.label"
           :label="item.label"
           :placeholder="item.placeholder"
           :type="item.type"
           v-model="form[item.form]"
           :error="v$[item.form].$error"
-          :error-message="v$[item.form].$errors[0]?.$message as string"
+          :error-message="v$[item.form].$errors[0]?.$message"
         />
       </div>
 
@@ -95,7 +61,7 @@ const handleSubmit = async () => {
         <span
           class="text-white items-center text-[14px] font-[500] leading-[150%] tracking-[-0.28px]"
         >
-          Sign Up
+{{props.button}}
         </span>
       </button>
 
@@ -104,10 +70,10 @@ const handleSubmit = async () => {
           class="text-[#878787] text-center text-[12px] font-[400] leading-[150%]"
         >
           By clicking the button, you agree to our
-          <a href="#" class="text-[#5A8072] hover:underline">Terms</a>,
-          <a href="#" class="text-[#5A8072] hover:underline">Privacy Policy</a>
+          <span class="text-[#5A8072]">Terms</span>,
+          <span class="text-[#5A8072]">Privacy Policy</span>
           and
-          <a href="#" class="text-[#5A8072] hover:underline">Security Policy</a
+          <span class="text-[#5A8072]">Security Policy</span
           >.
         </p>
       </div>

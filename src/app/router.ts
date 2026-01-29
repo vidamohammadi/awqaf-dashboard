@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
+import authRoutes from "../features/auth/routes";
 //import feature routes
 
 const routes = [
+  ...authRoutes,
   {
     path: "/",
     redirect: "/dashboard",
